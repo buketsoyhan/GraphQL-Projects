@@ -1,41 +1,36 @@
-const { ApolloServer, gql } = require("apollo-server")
-const { ApolloServerPluginLandingPageGraphQLPlayground } = require ('apollo-server-core');
+const { ApolloServer, gql } = require("apollo-server");
+const {
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} = require("apollo-server-core");
+
+//Ünlem koyduğumuzda değerin null olamacağini belirtir
+
 const typeDefs = gql`
+  type Book {
+    title: String!
+    author: String
+  }
 
-    type Book{
-        title:String
-        author:String
-    }
+  type Query {
+    books: Book!
+  }
+`;
 
-    type Query{
-        books: [Book]
-    }
-
-`
-const books = [
-    {
-      title: 'The Awakening',
-      author: 'Kate Chopin',
+const resolvers = {
+  Query: {
+    books: () => {
+      return {
+        title: "Yabanci",
+        author: "Albert Camus",
+      };
     },
-    {
-      title: 'City of Glass',
-      author: 'Paul Auster',
-    },
-  ];
-
-  const resolvers = {
-    Query: {
-      books: () => books,
-    },
-  };
+  },
+};
 
 const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground({ 
-        
-    })],
-})
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
+});
 
-server.listen().then(({url})=>console.log("Apolo server is up"))
-
+server.listen().then(({ url }) => console.log("Apolo server is up"));
